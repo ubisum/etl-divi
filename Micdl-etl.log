@@ -1,0 +1,107 @@
+16-06-2026 15:30:23 org.jboss.logging.LoggerProviders.logProvider - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+16-06-2026 15:30:23 org.springframework.boot.StartupInfoLogger.logStarting - Starting EtlDiviApplication using Java 21.0.9 with PID 4404 (C:\Users\biagi\OneDrive\Documents\sts_workspace_etl\etl-divi\target\classes started by biagi in C:\Users\biagi\OneDrive\Documents\sts_workspace_etl\etl-divi)
+16-06-2026 15:30:23 org.springframework.boot.StartupInfoLogger.logStarting - Running with Spring Boot v3.3.5, Spring v6.1.14
+16-06-2026 15:30:23 org.springframework.boot.SpringApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+16-06-2026 15:30:24 org.springframework.data.repository.config.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+16-06-2026 15:30:24 org.springframework.data.repository.config.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 27 ms. Found 0 JPA repository interfaces.
+16-06-2026 15:30:25 org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+16-06-2026 15:30:25 org.apache.juli.logging.DirectJDKLog.log - Initializing ProtocolHandler ["http-nio-8080"]
+16-06-2026 15:30:25 org.apache.juli.logging.DirectJDKLog.log - Starting service [Tomcat]
+16-06-2026 15:30:25 org.apache.juli.logging.DirectJDKLog.log - Starting Servlet engine: [Apache Tomcat/10.1.31]
+16-06-2026 15:30:25 org.apache.juli.logging.DirectJDKLog.log - Initializing Spring embedded WebApplicationContext
+16-06-2026 15:30:25 org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 1801 ms
+16-06-2026 15:30:26 org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+16-06-2026 15:30:27 org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+16-06-2026 15:30:27 org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16-06-2026 15:30:27 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	i.a.m.e.d.c.EtlDiviController:
+	{GET [/etl/divi/test]}: testConnessione()
+16-06-2026 15:30:27 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	{ [/error]}: error(HttpServletRequest)
+	{ [/error], produces [text/html]}: errorHtml(HttpServletRequest,HttpServletResponse)
+16-06-2026 15:30:27 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	o.s.w.a.OpenApiWebMvcResource:
+	{GET [/v3/api-docs], produces [application/json]}: openapiJson(HttpServletRequest,String,Locale)
+	{GET [/v3/api-docs.yaml], produces [application/vnd.oai.openapi]}: openapiYaml(HttpServletRequest,String,Locale)
+16-06-2026 15:30:27 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	{GET [/swagger-ui.html]}: redirectToUi(HttpServletRequest)
+16-06-2026 15:30:27 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	o.s.w.u.SwaggerConfigResource:
+	{GET [/v3/api-docs/swagger-config], produces [application/json]}: openapiJson(HttpServletRequest)
+16-06-2026 15:30:27 org.springframework.web.servlet.handler.AbstractDetectingUrlHandlerMapping.detectHandlers - 'beanNameHandlerMapping' {}
+16-06-2026 15:30:27 org.springframework.web.servlet.handler.SimpleUrlHandlerMapping.logMappings - 'resourceHandlerMapping' {/webjars/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /**=ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]], /swagger-ui*/*swagger-initializer.js=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /swagger-ui*/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]}
+16-06-2026 15:30:27 org.apache.juli.logging.DirectJDKLog.log - Starting ProtocolHandler ["http-nio-8080"]
+16-06-2026 15:30:27 org.springframework.context.support.AbstractApplicationContext.refresh - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+16-06-2026 15:30:27 org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.destroy - Closing JPA EntityManagerFactory for persistence unit 'default'
+16-06-2026 15:30:27 org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLogger.logMessage - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+16-06-2026 15:30:27 org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter.report - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+16-06-2026 15:30:36 org.jboss.logging.LoggerProviders.logProvider - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+16-06-2026 15:30:36 org.springframework.boot.StartupInfoLogger.logStarting - Starting EtlDiviApplication using Java 21.0.9 with PID 13436 (C:\Users\biagi\OneDrive\Documents\sts_workspace_etl\etl-divi\target\classes started by biagi in C:\Users\biagi\OneDrive\Documents\sts_workspace_etl\etl-divi)
+16-06-2026 15:30:36 org.springframework.boot.StartupInfoLogger.logStarting - Running with Spring Boot v3.3.5, Spring v6.1.14
+16-06-2026 15:30:36 org.springframework.boot.SpringApplication.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+16-06-2026 15:30:37 org.springframework.data.repository.config.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+16-06-2026 15:30:37 org.springframework.data.repository.config.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 14 ms. Found 0 JPA repository interfaces.
+16-06-2026 15:30:37 org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize - Tomcat initialized with port 8080 (http)
+16-06-2026 15:30:37 org.apache.juli.logging.DirectJDKLog.log - Initializing ProtocolHandler ["http-nio-8080"]
+16-06-2026 15:30:37 org.apache.juli.logging.DirectJDKLog.log - Starting service [Tomcat]
+16-06-2026 15:30:37 org.apache.juli.logging.DirectJDKLog.log - Starting Servlet engine: [Apache Tomcat/10.1.31]
+16-06-2026 15:30:37 org.apache.juli.logging.DirectJDKLog.log - Initializing Spring embedded WebApplicationContext
+16-06-2026 15:30:37 org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 1483 ms
+16-06-2026 15:30:38 org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo.addTransformer - No LoadTimeWeaver setup: ignoring JPA class transformer
+16-06-2026 15:30:39 org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+16-06-2026 15:30:39 org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16-06-2026 15:30:39 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	i.a.m.e.d.c.EtlDiviController:
+	{GET [/etl/divi/test]}: testConnessione()
+16-06-2026 15:30:39 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	{ [/error]}: error(HttpServletRequest)
+	{ [/error], produces [text/html]}: errorHtml(HttpServletRequest,HttpServletResponse)
+16-06-2026 15:30:39 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	o.s.w.a.OpenApiWebMvcResource:
+	{GET [/v3/api-docs], produces [application/json]}: openapiJson(HttpServletRequest,String,Locale)
+	{GET [/v3/api-docs.yaml], produces [application/vnd.oai.openapi]}: openapiYaml(HttpServletRequest,String,Locale)
+16-06-2026 15:30:39 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	{GET [/swagger-ui.html]}: redirectToUi(HttpServletRequest)
+16-06-2026 15:30:39 org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods - 
+	o.s.w.u.SwaggerConfigResource:
+	{GET [/v3/api-docs/swagger-config], produces [application/json]}: openapiJson(HttpServletRequest)
+16-06-2026 15:30:39 org.springframework.web.servlet.handler.AbstractDetectingUrlHandlerMapping.detectHandlers - 'beanNameHandlerMapping' {}
+16-06-2026 15:30:39 org.springframework.web.servlet.handler.SimpleUrlHandlerMapping.logMappings - 'resourceHandlerMapping' {/webjars/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /**=ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]], /swagger-ui*/*swagger-initializer.js=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /swagger-ui*/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]}
+16-06-2026 15:30:39 org.apache.juli.logging.DirectJDKLog.log - Starting ProtocolHandler ["http-nio-8080"]
+16-06-2026 15:30:39 org.springframework.boot.web.embedded.tomcat.TomcatWebServer.start - Tomcat started on port 8080 (http) with context path '/'
+16-06-2026 15:30:39 org.springframework.boot.StartupInfoLogger.logStarted - Started EtlDiviApplication in 4.079 seconds (process running for 5.099)
+16-06-2026 15:31:03 org.apache.juli.logging.DirectJDKLog.log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+16-06-2026 15:31:03 org.springframework.web.servlet.FrameworkServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+16-06-2026 15:31:03 org.springframework.web.servlet.FrameworkServlet.initServletBean - Completed initialization in 1 ms
+16-06-2026 15:31:04 io.swagger.v3.core.converter.ModelConverterContextImpl.resolve - resolve org.springframework.http.ResponseEntity<it.almaviva.mic.etl.divi.dto.EsitoDTO>
+16-06-2026 15:31:04 io.swagger.v3.core.converter.ModelConverterContextImpl.resolve - resolve [simple type, class it.almaviva.mic.etl.divi.dto.EsitoDTO]
+16-06-2026 15:31:04 io.swagger.v3.core.converter.ModelConverterContextImpl.resolve - resolve [simple type, class java.lang.Integer]
+16-06-2026 15:31:04 io.swagger.v3.core.converter.ModelConverterContextImpl.resolve - resolve [simple type, class java.lang.String]
+16-06-2026 15:31:04 io.swagger.v3.core.converter.ModelConverterContextImpl.resolve - resolve [simple type, class java.lang.Object]
+16-06-2026 15:31:04 org.springdoc.api.AbstractOpenApiResource.getOpenApi - Init duration for springdoc-openapi is: 347 ms
+16-06-2026 15:31:24 it.almaviva.mic.etl.divi.controller.EtlDiviController.testConnessione - Inizio procedura
+16-06-2026 15:31:24 it.almaviva.mic.etl.divi.controller.EtlDiviController.testConnessione - Creazione esito
+16-06-2026 15:31:24 it.almaviva.mic.etl.divi.controller.EtlDiviController.testConnessione - Fine esecuzione
+16-06-2026 15:32:08 it.almaviva.mic.etl.divi.controller.EtlDiviController.testConnessione - Inizio procedura
+16-06-2026 15:32:08 it.almaviva.mic.etl.divi.controller.EtlDiviController.testConnessione - Creazione esito
+16-06-2026 15:32:08 it.almaviva.mic.etl.divi.controller.EtlDiviController.testConnessione - Fine esecuzione
+16-06-2026 16:13:45 org.springdoc.api.AbstractOpenApiResource.getOpenApi - Fetching openApi document from cache
