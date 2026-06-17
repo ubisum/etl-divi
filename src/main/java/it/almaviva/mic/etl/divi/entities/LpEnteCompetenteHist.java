@@ -15,28 +15,20 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "lp_anagrafica_bene_hist")
-class LpAnagraficaBeneHist {
+@Table(name = "lp_ente_competente_hist")
+class LpEnteCompetenteHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_bene_hist")
-    private BigDecimal idBeneHist;
+    @Column(name = "id_ecp_hist")
+    private BigDecimal idEcpHist;
 
     private Integer source_id;
-    private String nctn;
-    private String nctr;
-    private String ncts;
-    private BigDecimal id_ecp;
-    
-    @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
-    private Integer categoria_id;
-    
-    private Integer tipologia_id;
+    private String codice_ecp;
     private String denominazione;
-    private String condiz_giuridica;
-    private String destinaz_uso;
+    private String sigla;
+    private String codice_fiscale;
+    private String partita_iva;
     private String hash_payload;
     private LocalDateTime valid_from;
     private LocalDateTime valid_to;

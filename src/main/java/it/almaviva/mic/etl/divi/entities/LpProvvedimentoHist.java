@@ -1,6 +1,7 @@
 package it.almaviva.mic.etl.divi.entities;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -15,33 +16,27 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "lp_anagrafica_bene_hist")
-class LpAnagraficaBeneHist {
+@Table(name = "lp_provvedimento_hist")
+class LpProvvedimentoHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_bene_hist")
-    private BigDecimal idBeneHist;
+    @Column(name = "id_prov_hist")
+    private BigDecimal idProvHist;
 
-    private Integer source_id;
-    private String nctn;
-    private String nctr;
-    private String ncts;
-    private BigDecimal id_ecp;
-    
+    private String id_atto;
+    private String tipologia_prov;
+    private LocalDate data_prov;
+
     @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
-    private Integer categoria_id;
-    
-    private Integer tipologia_id;
-    private String denominazione;
-    private String condiz_giuridica;
-    private String destinaz_uso;
+    @JoinColumn(name = "id_ecp_hist", nullable = false)
+    private LpEnteCompetenteHist enteCompetente;
+
     private String hash_payload;
     private LocalDateTime valid_from;
     private LocalDateTime valid_to;
     private Boolean is_current;
-    
+
     @ManyToOne
 	@JoinColumn(name = "batch_id", nullable = false)
 	private BatchJob batchJob;

@@ -1,6 +1,5 @@
 package it.almaviva.mic.etl.divi.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -14,29 +13,23 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
+@Table(name = "lp_dato_catastale_hist")
 @Data
-@Table(name = "lp_anagrafica_bene_hist")
-class LpAnagraficaBeneHist {
+class LpDatoCatastaleHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_bene_hist")
-    private BigDecimal idBeneHist;
+    @Column(name = "id_dc_hist")
+    private Long idDcHist;
 
-    private Integer source_id;
-    private String nctn;
-    private String nctr;
-    private String ncts;
-    private BigDecimal id_ecp;
-    
-    @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
-    private Integer categoria_id;
-    
-    private Integer tipologia_id;
-    private String denominazione;
-    private String condiz_giuridica;
-    private String destinaz_uso;
+    private String tipo_catasto;
+    private String cod_catastale_comune;
+    private String sezione_censuaria;
+    private String sezione_urbana;
+    private String foglio;
+    private String particella;
+    private String subalterno;
+    private String tipo_immobile;
     private String hash_payload;
     private LocalDateTime valid_from;
     private LocalDateTime valid_to;

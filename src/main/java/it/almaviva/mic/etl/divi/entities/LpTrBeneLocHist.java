@@ -15,33 +15,27 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "lp_anagrafica_bene_hist")
-class LpAnagraficaBeneHist {
+@Table(name = "lp_tr_bene_loc_hist")
+class LpTrBeneLocHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_bene_hist")
-    private BigDecimal idBeneHist;
+    @Column(name = "id_bl_hist")
+    private BigDecimal idBlHist;
 
-    private Integer source_id;
-    private String nctn;
-    private String nctr;
-    private String ncts;
-    private BigDecimal id_ecp;
-    
     @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
-    private Integer categoria_id;
-    
-    private Integer tipologia_id;
-    private String denominazione;
-    private String condiz_giuridica;
-    private String destinaz_uso;
-    private String hash_payload;
+    @JoinColumn(name = "id_bene_hist", nullable = false)
+    private LpAnagraficaBeneHist bene;
+
+    @ManyToOne
+    @JoinColumn(name = "id_loc_hist", nullable = false)
+    private LpLocalizzazioneHist localizzazione;
+
+    private String hash_link;
     private LocalDateTime valid_from;
     private LocalDateTime valid_to;
     private Boolean is_current;
-    
+
     @ManyToOne
 	@JoinColumn(name = "batch_id", nullable = false)
 	private BatchJob batchJob;
