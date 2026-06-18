@@ -2,6 +2,7 @@ package it.almaviva.mic.etl.divi.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,6 +34,10 @@ class LpEnteCompetenteHist {
     private LocalDateTime valid_from;
     private LocalDateTime valid_to;
     private Boolean is_current;
+    
+    @ManyToOne
+	@JoinColumn(name = "enteCompetente", nullable = false)
+    List<LpProvvedimentoHist> listaProvevdimenti;
     
     @ManyToOne
 	@JoinColumn(name = "batch_id", nullable = false)

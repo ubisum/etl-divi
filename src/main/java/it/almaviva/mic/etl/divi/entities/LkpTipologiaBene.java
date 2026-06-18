@@ -13,8 +13,9 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "lkp_categoria_bene")
-public class LkpCategoriaBene {
+@Table(name = "lkp_tipologia_bene")
+public class LkpTipologiaBene 
+{
 
 	@Id
 	@Column(name = "id")
@@ -23,7 +24,6 @@ public class LkpCategoriaBene {
 	@Column(name = "label")
 	private String label;
 	
-	@OneToMany(mappedBy = "categoriaBene", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "tipologiaBene", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<LpAnagraficaBeneHist> listaAnagrafiche;
-	
 }

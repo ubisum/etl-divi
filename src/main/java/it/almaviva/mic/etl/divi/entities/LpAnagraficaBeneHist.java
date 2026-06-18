@@ -2,14 +2,18 @@ package it.almaviva.mic.etl.divi.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -31,9 +35,21 @@ class LpAnagraficaBeneHist {
     
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
-    private Integer categoria_id;
+    private LkpCategoriaBene categoriaBene;
     
-    private Integer tipologia_id;
+    @ManyToOne
+    @JoinColumn(name = "tipologia_id", nullable = false)
+    private LkpTipologiaBene tipologiaBene;
+    
+    @OneToMany(mappedBy = "bene", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<LpTrBeneProvHist> listaBeniProv;
+    
+    @OneToMany(mappedBy = "bene", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<LpTrBeneLocHist> listaBeniLoc;
+    
+    @OneToMany(mappedBy = "bene", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<LpTrBeneDcHist> listaBeniDc;
+    
     private String denominazione;
     private String condiz_giuridica;
     private String destinaz_uso;
