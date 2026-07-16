@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 
-import it.almaviva.mic.etl.utils.MicdlEtlUtils;
+import it.almaviva.mic.etl.divi.utils.DiviETLUtils;
 
 public class StringToLocalDateConverter implements Converter<String, LocalDate>  
 {
@@ -18,7 +18,7 @@ public class StringToLocalDateConverter implements Converter<String, LocalDate>
 			return null;
 		
 		else
-			return MicdlEtlUtils.convertDateFromString(context.getSource());
+			return DiviETLUtils.convertDateFromString(context.getSource());
 	}
 
 }

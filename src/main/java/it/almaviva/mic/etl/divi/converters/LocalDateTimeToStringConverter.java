@@ -7,7 +7,7 @@ import org.modelmapper.spi.MappingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import it.almaviva.mic.etl.utils.MicdlEtlUtils;
+import it.almaviva.mic.etl.divi.utils.DiviETLUtils;
 
 public class LocalDateTimeToStringConverter implements Converter<LocalDateTime, String> 
 {
@@ -23,7 +23,7 @@ public class LocalDateTimeToStringConverter implements Converter<LocalDateTime, 
 			return null;
 		
 		else
-			return MicdlEtlUtils.formatDateTime(context.getSource());
+			return DiviETLUtils.formatDateTime(context.getSource());
 		
 	}
 }

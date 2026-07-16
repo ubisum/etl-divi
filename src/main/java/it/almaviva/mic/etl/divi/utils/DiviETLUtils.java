@@ -10,7 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
-import it.almaviva.mic.etl.exceptions.MicdlETLException;
+import it.almaviva.mic.etl.divi.exceptions.DivilETLException;
+
 
 public class DiviETLUtils 
 {
@@ -30,7 +31,7 @@ public class DiviETLUtils
 			 if(is == null)
 			 {
 				 logger.info("Impossibile trovare la risorsa {}", filename);
-				 throw new MicdlETLException("Impossibile trovate la risorsa " + filename, HttpStatus.INTERNAL_SERVER_ERROR);
+				 throw new DivilETLException("Impossibile trovate la risorsa " + filename, HttpStatus.INTERNAL_SERVER_ERROR);
 			 }
 			 
 			 /* lettura file */
@@ -40,7 +41,7 @@ public class DiviETLUtils
 		 catch (Throwable ex) 
 		{
 			 logger.info("Si e' verificato un errore", ex);
-			 throw new MicdlETLException(ex instanceof MicdlETLException ? ex.getMessage() : "Si e' verificato un errore interno", 
+			 throw new DivilETLException(ex instanceof DivilETLException ? ex.getMessage() : "Si e' verificato un errore interno", 
 					                     HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
-import it.almaviva.mic.etl.exceptions.MicdlETLException;
+import it.almaviva.mic.etl.divi.exceptions.DivilETLException;
 
 public class StringToIntegerConverter implements Converter<String, Integer> 
 {
@@ -32,7 +32,7 @@ public class StringToIntegerConverter implements Converter<String, Integer>
         catch (NumberFormatException e) 
         {
            logger.error("Si e' verificato un'errore durante la conversione da stringa ad intero", e);
-           throw new MicdlETLException("Si e' verificato un'errore durante la conversione da stringa ad intero", 
+           throw new DivilETLException("Si e' verificato un'errore durante la conversione da stringa ad intero", 
         		                       HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
