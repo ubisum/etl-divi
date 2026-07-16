@@ -30,10 +30,13 @@ class LpTrBeneProvHist {
     @ManyToOne
     @JoinColumn(name = "id_prov_hist", nullable = false)
     private LpProvvedimentoHist provvedimento;
+    
+    @ManyToOne
+	@JoinColumn(name = "batch_id", nullable = false)
+	private BatchJob batchJob;
 
     private String hash_link;
     private LocalDateTime valid_from;
     private LocalDateTime valid_to;
     private Boolean is_current;
-    private BigDecimal batch_id;
 }
