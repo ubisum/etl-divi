@@ -1,6 +1,7 @@
 package it.almaviva.mic.etl.divi.web;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import it.almaviva.mic.etl.divi.dto.json.DiviResponse;
-import it.almaviva.mic.etl.divi.exceptions.DivilETLException;
+import it.almaviva.mic.etl.divi.exceptions.DiviETLException;
 
 @Component
 public class DiviClient 
@@ -20,25 +22,53 @@ public class DiviClient
     private final RestClient restClient;
     private final String url;
     private final String authorization;
+    private final String elems;
 
     private static final Logger logger = LoggerFactory.getLogger(DiviClient.class);
 
-    public DiviClient(RestClient restClient, @Value("${divi.url}") String url, @Value("${divi.authorization}") String authorization) 
+    public DiviClient(RestClient restClient, 
+    		          @Value("${divi.url}") String url, 
+    		          @Value("${divi.authorization}") String authorization,
+    		          @Value("${divi.request.elems}") String elems) 
     {
         this.restClient = restClient;
         this.url = url;
         this.authorization = authorization;
+        this.elems = elems;
     }
 
 
-    public DiviResponse getDivi() 
+    public DiviResponse getDivi(Integer startIndex, String sortBy) 
     {
-    	logger.info("Preparazione chiamata a URL {}", url);
+    	logger.info("Preparazione chiamata a servizio DIVI...");
     	ResponseEntity<DiviResponse> response = null;
     	try
     	{
-    		response = restClient.get().
-                    uri(url).
+    		  UriComponentsBuilder builder = UriComponentsBuilder
+    		            .fromHttpUrl(url)
+    		            .queryParam("SERVICE", "WFS")
+	                    .queryParam("REQUEST", "GetFeature")
+	                    .queryParam("VERSION", "2.0.0")
+	                    .queryParam("OUTPUTFORMAT", "application/json")
+	                    .queryParam("TYPENAMES", "divi:immobili_tutelati_04_1");
+    		  
+    		  /* aggiunta indice di partenza */
+    		  if(startIndex != null)
+    			  builder.queryParam("STARTINDEX", startIndex.toString());
+    		  
+    		  /* aggiunta modalita' di ordinamento */
+    		  if(StringUtils.isNotBlank(sortBy))
+    			  builder.queryParam("SORTBY", sortBy);
+    		  
+    		  /* aggiunta numero di record richiesti */
+    		  if(StringUtils.isNotBlank(this.elems) && Integer.parseInt(this.elems) > 0)
+    			  builder.queryParam("COUNT", this.elems);
+    		  
+    		  logger.info("Tentativo di connessione all'URL {}", builder.build().toUriString());
+    		
+    		response = restClient.get().uri(builder.build().
+                    encode().
+                    toUri()).
                     header(HttpHeaders.AUTHORIZATION, "Basic " + authorization).
                     accept(MediaType.APPLICATION_JSON).
                     retrieve().
@@ -51,7 +81,16 @@ public class DiviClient
     		}
     		
     		else
-    			throw new DivilETLException("Impossibile effettuare la chiamata all'URL previsto", HttpStatus.INTERNAL_SERVER_ERROR);
+    			throw new DiviETLException("Impossibile effettuare la chiamata all'URL previsto", HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
+    	
+    	catch(NumberFormatException nfe)
+    	{
+    		logger.info("Si e' verificata un'eccezione durante una conversione da stringa ad intero. "
+    				  + " Verificare l'impostazione del numero di elementi richiesti", nfe);
+    		throw new DiviETLException("Si e' verificata un'eccezione durante una conversione da stringa ad intero. "
+    				                  + "Verificare l'impostazione del numero di elementi richiesti", 
+    				                    HttpStatus.INTERNAL_SERVER_ERROR);
     	}
     	
     	catch(Throwable ex)

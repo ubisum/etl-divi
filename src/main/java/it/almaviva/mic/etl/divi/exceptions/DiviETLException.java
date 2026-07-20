@@ -2,17 +2,17 @@ package it.almaviva.mic.etl.divi.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class DivilETLException extends RuntimeException
+public class DiviETLException extends RuntimeException
 { 
 	private static final long serialVersionUID = -647021387043820310L;
 	private HttpStatus status;
 	
-	public DivilETLException(String message)
+	public DiviETLException(String message)
 	{
 		super(message);
 	}
 	
-	public DivilETLException(String message, HttpStatus status)
+	public DiviETLException(String message, HttpStatus status)
 	{
 		super(message);
 		this.setStatus(status);

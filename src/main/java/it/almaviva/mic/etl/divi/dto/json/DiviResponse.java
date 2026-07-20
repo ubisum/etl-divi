@@ -15,4 +15,5 @@ public class DiviResponse
     private String timeStamp;
     private Crs crs;
     private List<Double> bbox;
+    private List<Link> links;
 }

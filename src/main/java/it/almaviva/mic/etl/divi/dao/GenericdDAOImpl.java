@@ -24,7 +24,7 @@ import it.almaviva.mic.etl.divi.converters.DiviConverter;
 import it.almaviva.mic.etl.divi.dto.BatchJobDTO;
 import it.almaviva.mic.etl.divi.entities.BatchJob;
 import it.almaviva.mic.etl.divi.enums.DiviEsitoBatchJob;
-import it.almaviva.mic.etl.divi.exceptions.DivilETLException;
+import it.almaviva.mic.etl.divi.exceptions.DiviETLException;
 import it.almaviva.mic.etl.divi.repositories.BatchJobRepository;
 import it.almaviva.mic.etl.divi.utils.DiviETLUtils;
 import jakarta.persistence.EntityManager;
@@ -88,7 +88,7 @@ public class GenericdDAOImpl implements GenericDAO
 			
 			Optional<BatchJob> job = batchRepository.findById(idJob);
 			if(job.isEmpty())
-				throw new DivilETLException("Nessun job presente con l'ID segnalato", HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new DiviETLException("Nessun job presente con l'ID segnalato", HttpStatus.INTERNAL_SERVER_ERROR);
 			
 			/* definizione del prepared statement */
 			String sql = "INSERT INTO asset_mgmt.batch_job_dettaglio "
@@ -110,16 +110,16 @@ public class GenericdDAOImpl implements GenericDAO
 			
 		}
 		
-		catch(DivilETLException mee)
+		catch(DiviETLException mee)
 		{
 			/* si rilancia l'eccezione verso il controller */
-			throw new DivilETLException(mee.getMessage(), mee.getStatus());
+			throw new DiviETLException(mee.getMessage(), mee.getStatus());
 		}
 		
 		catch(Throwable ex)
 		{
 			logger.info("Si e' verificata un'eccezione durante l'aggiornamento del job", ex);
-			throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
@@ -131,7 +131,7 @@ public class GenericdDAOImpl implements GenericDAO
 		if(StringUtils.isBlank(procedure))
 		{
 			logger.info("Nome della storeed procedure fornita e' pari a NULL");
-			throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		logger.info("Richiesta esecuzione stored procedure {}", procedure);
@@ -155,7 +155,7 @@ public class GenericdDAOImpl implements GenericDAO
 		catch(Throwable ex)
 		{
 			logger.info("Si e' verificato un errroe durante l'esecuzione della procedure {}", procedure, ex);
-			throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 			
 		}
 	}
@@ -167,7 +167,7 @@ public class GenericdDAOImpl implements GenericDAO
 		if(StringUtils.isBlank(procedure))
 		{
 			logger.info("Nome della storeed procedure fornita e' pari a NULL");
-			throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		logger.info("Richiesta esecuzione stored procedure {}", procedure);
@@ -180,7 +180,7 @@ public class GenericdDAOImpl implements GenericDAO
 		catch(Throwable ex)
 		{
 			logger.info("Si e' verificato un errroe durante l'esecuzione della procedure {}", procedure, ex);
-			throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 			
 		}
 
@@ -209,7 +209,7 @@ public class GenericdDAOImpl implements GenericDAO
 		catch(Throwable ex)
 		{
 			logger.info("Si e' verificato un errore durante l'inserimento del job {}", fonte, ex);
-			throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		
@@ -226,7 +226,7 @@ public class GenericdDAOImpl implements GenericDAO
 			if(idJob == null)
 			{
 				logger.info("Identificativo del job non valido");
-				throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
 			logger.info("Ricerca del job sul database...");
@@ -235,7 +235,7 @@ public class GenericdDAOImpl implements GenericDAO
 			if(job.isEmpty())
 			{
 				logger.info("Impossibile trovare un job con l'identificativo specificato");
-				throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
 			logger.info("Preparazione all'aggiornamento del job...");
@@ -248,18 +248,18 @@ public class GenericdDAOImpl implements GenericDAO
 			logger.info("Salvataggio job completatao");
 		}
 		
-		catch(DivilETLException mee)
+		catch(DiviETLException mee)
 		{
 			logger.info("Si e' verificata un'eccezione durante l'aggiornamento del job", mee);
 			
 			/* si rilancia l'eccezione verso il controller */
-			throw new DivilETLException(mee.getMessage(), mee.getStatus());
+			throw new DiviETLException(mee.getMessage(), mee.getStatus());
 		}
 		
 		catch(Throwable ex)
 		{
 			logger.info("Si e' verificata un'eccezione durante l'aggiornamento del job", ex);
-			throw new DivilETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DiviETLException("Si e' verificato un errore interno", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
