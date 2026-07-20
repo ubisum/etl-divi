@@ -57,6 +57,7 @@ class LpAnagraficaBeneHist {
     private LocalDateTime valid_from;
     private LocalDateTime valid_to;
     private Boolean is_current;
+    private LocalDateTime data_ultimo_aggiornamento;
     
     @ManyToOne
 	@JoinColumn(name = "batch_id", nullable = false)
