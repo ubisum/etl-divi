@@ -1,20 +1,27 @@
 package it.almaviva.mic.etl.divi.utils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.almaviva.mic.etl.divi.exceptions.DiviETLException;
 
 
 public class DiviETLUtils 
 {
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	private static final Logger logger = LoggerFactory.getLogger(DiviETLUtils.class);
 	
 	public static String readContentFromFile(String filename)
@@ -75,6 +82,16 @@ public class DiviETLUtils
 		return ldt.format(formatter);
 	}
 	
+	public static String formatDateTimeForWFS(LocalDateTime ldt, boolean addEq)
+	{
+		if(ldt == null)
+			return null;
+		
+		String filter = "data_ultimo_aggiornamento > " + (addEq ? "=" : "") + "'%s'";
+		
+		return String.format(filter, ldt.truncatedTo(ChronoUnit.MILLIS).atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
+	}
+	
 	public static LocalDate convertDateFromString(String date)
 	{
 		/* definizione del pattern */
@@ -82,4 +99,23 @@ public class DiviETLUtils
 		
 		return LocalDate.parse(date, formatter);
 	}
+	
+	public static <T> T readJson(String fileName, Class<T> clazz) 
+	{
+
+        ClassPathResource resource = new ClassPathResource("json/" + fileName);
+
+        try 
+        {
+        	InputStream is = resource.getInputStream();
+            return OBJECT_MAPPER.readValue(is, clazz);
+        }
+        
+        catch(Throwable ex)
+        {
+        	 logger.info("Si e' verificato un errore durante la lettura del file JSON", ex);
+			 throw new DiviETLException(ex instanceof DiviETLException ? ex.getMessage() : "Si e' verificato un errore interno", 
+					                     HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

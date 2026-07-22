@@ -16,7 +16,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "lp_tr_prov_media_hist")
-class LpTrProvMediaHist {
+public class LpTrProvMediaHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -19,7 +19,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "lp_ente_competente_hist")
-class LpEnteCompetenteHist {
+public class LpEnteCompetenteHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,0 +1,42 @@
+INSERT INTO DIVI_STAGING
+(
+	bene_source_id,
+	bene_classe,
+	bene_tipo,
+	bene_denominazione,
+	bene_hash,
+	dc_tipo_catasto,
+	dc_codice_catastale,
+	dc_sezione_censuaria,
+	dc_sezione_urbana,
+	dc_foglio,
+	dc_particella,
+	dc_subalterno,
+	dc_tipo_immobile,
+	dc_hash,
+	ente_denominazione,
+	ente_sigla,
+	ente_cf,
+	ente_pi,
+	ente_hash,
+	loc_regione,
+	loc_provincia,
+	loc_comune,
+	loc_indirizzo,
+	loc_civico,
+	loc_lat,
+	loc_lon,
+	loc_hash,
+	prov_id_atto,
+	prov_tipo,
+	prov_data,
+	prov_hash,
+	batch_id
+)
+VALUES
+(
+	?,?,?,?,?,?,?,?,?,?,
+	?,?,?,?,?,?,?,?,?,?,
+	?,?,?,?,?,?,?,?,?,?,
+	?,?
+)

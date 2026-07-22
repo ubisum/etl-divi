@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,9 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +25,12 @@ import org.springframework.stereotype.Component;
 
 import it.almaviva.mic.etl.divi.converters.DiviConverter;
 import it.almaviva.mic.etl.divi.dto.BatchJobDTO;
+import it.almaviva.mic.etl.divi.dto.json.Feature;
 import it.almaviva.mic.etl.divi.entities.BatchJob;
 import it.almaviva.mic.etl.divi.enums.DiviEsitoBatchJob;
 import it.almaviva.mic.etl.divi.exceptions.DiviETLException;
 import it.almaviva.mic.etl.divi.repositories.BatchJobRepository;
+import it.almaviva.mic.etl.divi.utils.DiviETLConsts;
 import it.almaviva.mic.etl.divi.utils.DiviETLUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
@@ -298,6 +303,68 @@ public class GenericdDAOImpl implements GenericDAO
 			if(++counter % Integer.valueOf(maxNumRecords) == 0)
 				ps.executeBatch();
 			
+		}
+	}
+
+	@Override
+	public void insertDiviData(List<Feature> listaFeature, BigDecimal idBatch) 
+	{
+		logger.info("Inserimento dati da DIVI...");
+		
+		if(CollectionUtils.isEmpty(listaFeature))
+		{
+			logger.info("Nessun record da inserire trovato");
+			return;
+		}
+		
+		/* grandezza batch */
+		Integer maxNumRecords = null;
+		if(StringUtils.isBlank(batchSize))
+		{
+			logger.info("Nessuna property indicante la misura del batch trovata. Si imposta la grandezza massima di default a 1000");
+			maxNumRecords = Integer.valueOf(1000);
+		}
+		
+		else
+			maxNumRecords = Integer.valueOf(batchSize);
+		
+		try
+		{
+			logger.info("Sono presenti {} record da inserire nella tabella di staging", listaFeature.size());
+			
+			logger.info("Creazione connessione verso il DB...");
+			Session session = entityManager.unwrap(Session.class);
+			Connection conn = session.doReturningWork(c -> c);
+			
+			logger.info("Lettura del codice SQL per la creazione della tabella temporanea...");
+			String sqlTabellaTemporanea = DiviETLUtils.readContentFromFile(DiviETLConsts.DIVI_CREATE_STAGING);
+			if(StringUtils.isEmpty(sqlTabellaTemporanea))
+			{
+				logger.info("Impossibile leggere il codice per la creazione della tabella di staging");
+				throw new DiviETLException("Impossibile leggere codice per la creazione della tabella di staging", 
+						                    HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+			logger.info("Rimozione della tabella temporanea (se presente)...");
+			Statement createStagingStmt = conn.createStatement();
+			createStagingStmt.execute("DROP TEMPORARY TABLE IF EXISTS DIVI_STAGING");
+			
+			logger.info("Creazione tabella temporanea...");
+			createStagingStmt.executeUpdate(sqlTabellaTemporanea);
+			
+			logger.info("Lettura codice SQL per l'inserimento dei record nella tabella di staging...");
+			String sqlInserimentoIndirizzi = DiviETLUtils.readContentFromFile(DiviETLConsts.DIVI_INSERT_STAGING);
+			if(StringUtils.isEmpty(sqlInserimentoIndirizzi))
+			{
+				logger.info("Impossibile leggere il codice per l'inserimento dei record nella tabella di staging");
+				throw new DiviETLException("Impossibile leggere il codice per l'inserimento dei record nella tabella di staging", 
+						                    HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		
+		catch(Throwable ex)
+		{
+			logger.info("Si e' verificata un'eccezione", ex);
 		}
 	}
 }

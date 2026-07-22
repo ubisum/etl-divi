@@ -20,7 +20,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "lp_localizzazione_hist")
-class LpLocalizzazioneHist {
+public class LpLocalizzazioneHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

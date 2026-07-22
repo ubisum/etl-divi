@@ -19,7 +19,7 @@ import lombok.Data;
 @Entity
 @Table(name = "lp_dato_catastale_hist")
 @Data
-class LpDatoCatastaleHist {
+public class LpDatoCatastaleHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

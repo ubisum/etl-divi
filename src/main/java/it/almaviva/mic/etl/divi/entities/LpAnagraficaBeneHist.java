@@ -20,7 +20,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "lp_anagrafica_bene_hist")
-class LpAnagraficaBeneHist {
+public class LpAnagraficaBeneHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

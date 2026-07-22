@@ -1,6 +1,8 @@
 package it.almaviva.mic.etl.divi.web;
 
 
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +40,7 @@ public class DiviClient
     }
 
 
-    public DiviResponse getDivi(Integer startIndex, String sortBy) 
+    public DiviResponse getDivi(Map<String, String> params) 
     {
     	logger.info("Preparazione chiamata a servizio DIVI...");
     	ResponseEntity<DiviResponse> response = null;
@@ -52,13 +54,9 @@ public class DiviClient
 	                    .queryParam("OUTPUTFORMAT", "application/json")
 	                    .queryParam("TYPENAMES", "divi:immobili_tutelati_04_1");
     		  
-    		  /* aggiunta indice di partenza */
-    		  if(startIndex != null)
-    			  builder.queryParam("STARTINDEX", startIndex.toString());
-    		  
-    		  /* aggiunta modalita' di ordinamento */
-    		  if(StringUtils.isNotBlank(sortBy))
-    			  builder.queryParam("SORTBY", sortBy);
+    		  /* aggiunta indici */
+    		  for(String key : params.keySet())
+    			  builder.queryParam(key, params.get(key));
     		  
     		  /* aggiunta numero di record richiesti */
     		  if(StringUtils.isNotBlank(this.elems) && Integer.parseInt(this.elems) > 0)

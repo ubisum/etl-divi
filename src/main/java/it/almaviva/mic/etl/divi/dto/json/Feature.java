@@ -10,7 +10,7 @@ public class Feature
     private String type;
     private String id;
     private Geometry geometry;
-    private String geometryName;
+    private String geometry_name;
     private Property properties;
     private List<Double> bbox;
 }

@@ -16,7 +16,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "lp_tr_bene_loc_hist")
-class LpTrBeneLocHist {
+public class LpTrBeneLocHist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

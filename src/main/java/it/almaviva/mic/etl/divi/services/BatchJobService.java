@@ -1,20 +1,16 @@
-package it.almaviva.mic.etl.divi.dao;
+package it.almaviva.mic.etl.divi.services;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import it.almaviva.mic.etl.divi.dto.BatchJobDTO;
-import it.almaviva.mic.etl.divi.dto.json.Feature;
 import it.almaviva.mic.etl.divi.enums.DiviEsitoBatchJob;
 
-public interface GenericDAO 
+public interface BatchJobService 
 {
-	public void eseguiStoredProcedure(String procedure);
-	public Integer eseguiStoredProcedureContaRecord(String procedure);
 	public BigDecimal insertBatchJob(String fonte, String tipoCarico);
-	public void updateBatchJob(BigDecimal idJob, DiviEsitoBatchJob esito);
+	public void updateBatchJob(BigDecimal idBatch, DiviEsitoBatchJob esito);
 	public void inserisciDettagliBatchJob(Map<Integer, List<String>> errori, BigDecimal idJob, String filename);
 	public BatchJobDTO findUltimoBatchJobAttivo();
-	public void insertDiviData(List<Feature> listaFeature, BigDecimal idBatch);
 }
