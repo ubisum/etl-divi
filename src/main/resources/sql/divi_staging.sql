@@ -1,9 +1,10 @@
 CREATE TEMPORARY TABLE DIVI_STAGING
 (
 	bene_source_id int,
-	bene_classe int,
-	bene_tipo int, 
+	bene_classe varchar(200),
+	bene_tipo varchar(200), 
 	bene_denominazione varchar(255),
+	bene_data_utimo_aggiornamento datetime(3),
 	bene_hash varchar(64),
 	dc_tipo_catasto varchar(1),
 	dc_codice_catastale varchar(4),
