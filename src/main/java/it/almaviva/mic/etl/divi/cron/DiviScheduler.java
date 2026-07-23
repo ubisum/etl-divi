@@ -61,7 +61,7 @@ public class DiviScheduler {
     			if(this.readFromJson != null && this.readFromJson)
     			{
     				logger.info("Richiesta lettura JSON da file");
-    				response = DiviETLUtils.readJson("example.json", DiviResponse.class);
+    				response = DiviETLUtils.readJson("export_ridotto.json", DiviResponse.class);
     				
     				datiRicevuti.add(response);
     			}

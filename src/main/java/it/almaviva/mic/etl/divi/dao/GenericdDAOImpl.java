@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -362,13 +363,54 @@ public class GenericdDAOImpl implements GenericDAO
 			createStagingStmt.executeUpdate(sqlTabellaTemporanea);
 			
 			logger.info("Lettura codice SQL per l'inserimento dei record nella tabella di staging...");
-			String sqlInserimentoIndirizzi = DiviETLUtils.readContentFromFile(DiviETLConsts.DIVI_INSERT_STAGING);
-			if(StringUtils.isEmpty(sqlInserimentoIndirizzi))
+			String sqlInserimentoRecord = DiviETLUtils.readContentFromFile(DiviETLConsts.DIVI_INSERT_STAGING);
+			if(StringUtils.isEmpty(sqlInserimentoRecord))
 			{
 				logger.info("Impossibile leggere il codice per l'inserimento dei record nella tabella di staging");
 				throw new DiviETLException("Impossibile leggere il codice per l'inserimento dei record nella tabella di staging", 
 						                    HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+			
+			/* creazione del prepared statement */
+			PreparedStatement inserimentoRecordPs = conn.prepareStatement(sqlInserimentoRecord);
+			
+			/* contatore dei record */
+			int counter = 0;
+			
+			for(Feature feature : listaFeature)
+			{
+				if(feature.getProperties() != null)
+				{
+					/* creazione dell'i-simo record sulla tabella temporanea */
+					popolamentoRecordDivi(inserimentoRecordPs, feature.getProperties(), idBatch);
+					
+					/* aggiunta al batch */
+					inserimentoRecordPs.addBatch();
+					
+					/* controllo del raggiungimento del numero massimo di elementi per batch */
+					if(++counter % Integer.valueOf(batchSize) == 0)
+						inserimentoRecordPs.executeBatch();
+				}
+				
+			}
+			
+			/* esecuzione del batch, se non avvenuto nel ciclo */
+			inserimentoRecordPs.executeBatch();
+			
+			logger.info("Inserimento terminato");
+			
+			/* verifica del numero dei record effettivamente scritti */
+			logger.info("Verifica dei record effettivamente scritti sulla tabella temporanea...");
+			
+			String sqlCountRecords = "SELECT COUNT(*) FROM DIVI_STAGING";
+			Statement countRecords = conn.createStatement();
+			
+			ResultSet result = countRecords.executeQuery(sqlCountRecords);
+			Integer numeroRecordScritti = result.next() ? result.getInt(1) : 0;
+			
+			logger.info("Record effettivamente inseriti sulla tabella di staging: {}", numeroRecordScritti);
+			
+			logger.info("Terminato inserimento indirizzi in tabella di staging");
 		}
 		
 		catch(Throwable ex)
@@ -380,20 +422,20 @@ public class GenericdDAOImpl implements GenericDAO
 	private void popolamentoRecordDivi(PreparedStatement ps, Property property, BigDecimal idBatch) throws SQLException, NoSuchAlgorithmException
 	{
 		/* iterazione sui record */
-		int counter = 1;
+		Integer counter = 1;
 		
 		/* funzioni di inserimento dati */
-		insertDatiBene(ps, property, counter);
-		insertDatiCatasto(ps, property, counter);
-		insertDatiEnte(ps, property, counter);
-		insertDatiLocalita(ps, property, counter);
-		insertDatiProvvedimento(ps, property, counter);
+		counter = insertDatiBene(ps, property, counter);
+		counter = insertDatiCatasto(ps, property, counter);
+		counter = insertDatiEnte(ps, property, counter);
+		counter = insertDatiLocalita(ps, property, counter);
+		counter = insertDatiProvvedimento(ps, property, counter);
 		
 		/* inserimento ID del batch */
 		ps.setBigDecimal(counter++, idBatch);
 	}
 	
-	private void insertDatiProvvedimento(PreparedStatement ps, Property property, int counter)throws SQLException, NoSuchAlgorithmException
+	private Integer insertDatiProvvedimento(PreparedStatement ps, Property property, Integer counter)throws SQLException, NoSuchAlgorithmException
 	{
 		/* INSERIMENTO PARAMETRI DEL PROVVEDIMENTO  ---------------------------------------------------------------------------- */
 		StringBuilder prov_sb = new StringBuilder();
@@ -423,8 +465,8 @@ public class GenericdDAOImpl implements GenericDAO
 		/* data */
 		if(property.getProvData() != null)
 		{
-			prov_sb.append(property.getProvData());
-			LocalDate ld = LocalDate.parse(property.getProvData());
+			prov_sb.append(property.getProvData().replace("Z", ""));
+			LocalDate ld = LocalDate.parse(property.getProvData().replace("Z", ""));
 			
 			ps.setObject(counter++, ld);
 		}
@@ -437,11 +479,13 @@ public class GenericdDAOImpl implements GenericDAO
 		
 		/* hash */
 		ps.setString(counter++, HashingUtils.getHashingCode(prov_sb.toString()));
+		
+		return counter;
 			
 		
 	}
 	
-	private void insertDatiLocalita(PreparedStatement ps, Property property, int counter)throws SQLException, NoSuchAlgorithmException 
+	private Integer insertDatiLocalita(PreparedStatement ps, Property property, Integer counter)throws SQLException, NoSuchAlgorithmException 
 	{
 		/* INSERIMENTO PARAMETRI DELLA LOCALITA' ---------------------------------------------------------------------------- */
 		StringBuilder localita_sb = new StringBuilder();
@@ -519,9 +563,11 @@ public class GenericdDAOImpl implements GenericDAO
 		
 		/* hash */
 		ps.setString(counter++, HashingUtils.getHashingCode(localita_sb.toString()));
+		
+		return counter;
 	}
 
-	private void insertDatiBene(PreparedStatement ps, Property property, int counter)throws SQLException, NoSuchAlgorithmException 
+	private Integer insertDatiBene(PreparedStatement ps, Property property, Integer counter)throws SQLException, NoSuchAlgorithmException 
 	{
 		/* INSERIMENTO PARAMETRI DEL BENE ---------------------------------------------------------------------------- */
 		StringBuilder bene_sb = new StringBuilder();
@@ -583,21 +629,23 @@ public class GenericdDAOImpl implements GenericDAO
 		
 		/* hash */
 		ps.setString(counter++, HashingUtils.getHashingCode(bene_sb.toString()));
+		
+		return counter;
 	}
 	
-	private void insertDatiCatasto(PreparedStatement ps, Property property, int counter)throws SQLException, NoSuchAlgorithmException 
+	private Integer insertDatiCatasto(PreparedStatement ps, Property property, Integer counter)throws SQLException, NoSuchAlgorithmException 
 	{
 		/* INSERIMENTO PARAMETRI DEL CATASTO ---------------------------------------------------------------------------- */
 		StringBuilder catasto_sb = new StringBuilder();
 		
 		/* tipo catasto */
-		if(property.getImmoCatasto() != null)
-			catasto_sb.append(property.getImmoCatasto() + "|");
+		if(property.getImmoTipoImmobile() != null)
+			catasto_sb.append(property.getImmoTipoImmobile() + "|");
 		
 		else
 			catasto_sb.append("NULL" + "|");
 		
-		ps.setString(counter++, property.getImmoCatasto());
+		ps.setString(counter++, property.getImmoTipoImmobile());
 		
 		/* codice catastale */
 		if(property.getImmoCodiceCatastaleComune() != null)
@@ -654,19 +702,21 @@ public class GenericdDAOImpl implements GenericDAO
 		ps.setString(counter++, property.getImmoSubalterno());
 		
 		/* tipo immobile */
-		if(property.getImmoTipoImmobile() != null)
-			catasto_sb.append(property.getImmoTipoImmobile());
+		if(property.getImmoCatasto() != null)
+			catasto_sb.append(property.getImmoCatasto());
 		
 		else
 			catasto_sb.append("NULL");
 		
-		ps.setString(counter++, property.getImmoTipoImmobile());
+		ps.setString(counter++, property.getImmoCatasto());
 		
 		/* hash */
 		ps.setString(counter++, HashingUtils.getHashingCode(catasto_sb.toString()));
+		
+		return counter;
 	}
 	
-	private void insertDatiEnte(PreparedStatement ps, Property property, int counter)throws SQLException, NoSuchAlgorithmException
+	private Integer insertDatiEnte(PreparedStatement ps, Property property, Integer counter)throws SQLException, NoSuchAlgorithmException
 	{
 		/* INSERIMENTO PARAMETRI DELL'ENTE ---------------------------------------------------------------------------- */
 		StringBuilder ente_sb = new StringBuilder();
@@ -709,6 +759,8 @@ public class GenericdDAOImpl implements GenericDAO
 		
 		/*hash */
 		ps.setString(counter++, HashingUtils.getHashingCode(ente_sb.toString()));
+		
+		return counter;
 		
 	}
 }

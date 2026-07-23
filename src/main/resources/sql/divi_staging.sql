@@ -21,7 +21,7 @@ CREATE TEMPORARY TABLE DIVI_STAGING
 	ente_pi varchar(11),
 	ente_hash varchar(64),
 	loc_regione varchar(50),
-	loc_provincia varchar(2),
+	loc_provincia varchar(50),
 	loc_comune varchar(50),
 	loc_indirizzo varchar(120),
 	loc_civico varchar(20),
