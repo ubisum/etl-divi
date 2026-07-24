@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import it.almaviva.mic.etl.divi.dao.GenericDAO;
 import it.almaviva.mic.etl.divi.dto.json.DiviResponse;
 import it.almaviva.mic.etl.divi.dto.json.Feature;
+import it.almaviva.mic.etl.divi.utils.DiviETLConsts;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -42,7 +43,8 @@ public class DiviServiceImpl implements DiviService
 		logger.info("Invio dati al DAO...");
 		genericDAO.insertDiviData(listaFeature, idBatch);
 		
-		
+		logger.info("Esecuzione stored procedure...");
+		genericDAO.eseguiStoredProcedure(DiviETLConsts.DIVI_STORED_PROCEDURE);
 	}
 
 }

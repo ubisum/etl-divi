@@ -1,26 +1,23 @@
+DROP PROCEDURE IF EXISTS sp_elabora_divi_staging;
+
 DELIMITER $$
 
 CREATE PROCEDURE sp_elabora_divi_staging()
 BEGIN
-
-    ------------------------------------------------------------------
-    -- Variabile di controllo fine cursore
-    ------------------------------------------------------------------
-
+    -- ----------------------------------------------------------------
+    -- Variabili di controllo
+    -- ----------------------------------------------------------------
     DECLARE done BOOLEAN DEFAULT FALSE;
 
-
-    ------------------------------------------------------------------
-    -- Variabili corrispondenti alle colonne DIVI_STAGING
-    ------------------------------------------------------------------
-
+    -- ----------------------------------------------------------------
+    -- Variabili di appoggio DIVI_STAGING
+    -- ----------------------------------------------------------------
     DECLARE v_bene_source_id INT;
     DECLARE v_bene_classe VARCHAR(200);
     DECLARE v_bene_tipo VARCHAR(200);
     DECLARE v_bene_denominazione VARCHAR(255);
     DECLARE v_bene_data_utimo_aggiornamento DATETIME(3);
     DECLARE v_bene_hash VARCHAR(64);
-
     DECLARE v_dc_tipo_catasto VARCHAR(1);
     DECLARE v_dc_codice_catastale VARCHAR(4);
     DECLARE v_dc_sezione_censuaria VARCHAR(3);
@@ -30,13 +27,11 @@ BEGIN
     DECLARE v_dc_subalterno VARCHAR(6);
     DECLARE v_dc_tipo_immobile VARCHAR(50);
     DECLARE v_dc_hash VARCHAR(64);
-
     DECLARE v_ente_denominazione VARCHAR(255);
     DECLARE v_ente_sigla VARCHAR(30);
     DECLARE v_ente_cf VARCHAR(16);
     DECLARE v_ente_pi VARCHAR(11);
     DECLARE v_ente_hash VARCHAR(64);
-
     DECLARE v_loc_regione VARCHAR(50);
     DECLARE v_loc_provincia VARCHAR(50);
     DECLARE v_loc_comune VARCHAR(50);
@@ -45,18 +40,23 @@ BEGIN
     DECLARE v_loc_lat DECIMAL(10,7);
     DECLARE v_loc_lon DECIMAL(10,7);
     DECLARE v_loc_hash VARCHAR(64);
-
     DECLARE v_prov_id_atto VARCHAR(60);
     DECLARE v_prov_tipo VARCHAR(60);
     DECLARE v_prov_data DATE;
     DECLARE v_prov_hash VARCHAR(64);
-
     DECLARE v_batch_id BIGINT;
 
+    -- ----------------------------------------------------------------
+    -- Variabili risultato elaborazione
+    -- ----------------------------------------------------------------
+    DECLARE v_id_classe INT DEFAULT NULL;
+    DECLARE v_id_tipo INT DEFAULT NULL;
+	DECLARE v_sigla_provincia VARCHAR(2) DEFAULT NULL;
+	DECLARE v_nuovo_id INT DEFAULT NULL;
 
-    ------------------------------------------------------------------
+    -- ----------------------------------------------------------------
     -- Dichiarazione cursore
-    ------------------------------------------------------------------
+    -- ----------------------------------------------------------------
 
     DECLARE cur CURSOR FOR
         SELECT
@@ -95,23 +95,21 @@ BEGIN
             batch_id
         FROM DIVI_STAGING;
 
-
-    ------------------------------------------------------------------
+    -- ----------------------------------------------------------------
     -- Handler fine cursore
-    ------------------------------------------------------------------
-
+    -- ----------------------------------------------------------------
     DECLARE CONTINUE HANDLER FOR NOT FOUND
         SET done = TRUE;
 
-
-    ------------------------------------------------------------------
-    -- Elaborazione record
-    ------------------------------------------------------------------
-
+    -- ----------------------------------------------------------------
+    -- Apertura cursore
+    -- ----------------------------------------------------------------
     OPEN cur;
 
     read_loop: LOOP
-
+        -- ----------------------------------------------------------------
+        -- Lettura record corrente
+        -- ----------------------------------------------------------------
         FETCH cur INTO
             v_bene_source_id,
             v_bene_classe,
@@ -151,17 +149,114 @@ BEGIN
             LEAVE read_loop;
         END IF;
 
-        ------------------------------------------------------------------
-        -- Logica di elaborazione del singolo record
-        ------------------------------------------------------------------
+        -- ----------------------------------------------------------------
+        -- Recupero classe oppure creazione nuovo record
+        -- ----------------------------------------------------------------
+        SET v_id_classe = NULL;
 
-        -- TODO
+		IF v_bene_classe IS NOT NULL THEN
+			BEGIN
+				DECLARE v_classe_trovata BOOLEAN DEFAULT TRUE;
+
+				-- ---------------------------------------------------------------------------
+				-- Handler locale: pilota la creazione del nuovo record (se necessario)
+				-- ---------------------------------------------------------------------------
+				DECLARE CONTINUE HANDLER FOR NOT FOUND
+					SET v_classe_trovata = FALSE;
+
+				SELECT id
+				INTO v_id_classe
+				FROM lkp_tipologia_bene
+				WHERE LOWER(label) = LOWER(v_bene_classe)
+				LIMIT 1;
+
+				IF NOT v_classe_trovata THEN
+					SELECT COALESCE(MAX(id), 0) + 1
+					INTO v_nuovo_id
+					FROM lkp_tipologia_bene;
+
+				INSERT INTO lkp_tipologia_bene
+				(id, label)
+				VALUES
+				(v_nuovo_id, v_bene_classe);
+
+				SET v_id_classe = v_nuovo_id;
+				
+				END IF;
+
+			END;
+		END IF;
+
+		-- ----------------------------------------------------------------
+        -- Recupero tipo oppure creazione nuovo record
+        -- ----------------------------------------------------------------
+        SET v_id_tipo = NULL;
+		
+		IF v_bene_tipo IS NOT NULL THEN
+			BEGIN
+				DECLARE v_tipo_trovato BOOLEAN DEFAULT TRUE;
+
+				-- ---------------------------------------------------------------------------
+				-- Handler locale: pilota la creazione del nuovo record (se necessario)
+				-- ---------------------------------------------------------------------------
+				DECLARE CONTINUE HANDLER FOR NOT FOUND
+					SET v_tipo_trovato = FALSE;
+
+				SELECT id
+				INTO v_id_tipo
+				FROM lkp_categoria_bene
+				WHERE LOWER(label) = LOWER(v_bene_tipo)
+				LIMIT 1;
+
+				IF NOT v_tipo_trovato THEN
+					SELECT COALESCE(MAX(id), 0) + 1
+					INTO v_nuovo_id
+					FROM lkp_categoria_bene;
+					
+					INSERT INTO lkp_categoria_bene
+					(id, label)
+					VALUES
+					(v_nuovo_id, v_bene_tipo);
+
+					SET v_id_tipo = v_nuovo_id;
+				END IF;
+
+			END;
+		END IF;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+        -- ----------------------------------------------------------------
+        -- Qui continueranno le altre elaborazioni:
+        --
+        -- uso di v_id_classe
+        -- inserimenti nelle tabelle collegate
+        -- gestione hash
+        -- gestione batch
+        -- ----------------------------------------------------------------
+
 
 
     END LOOP;
 
 
+
+    -- ----------------------------------------------------------------
+    -- Chiusura cursore
+    -- ----------------------------------------------------------------
+
     CLOSE cur;
+
 
 END$$
 
