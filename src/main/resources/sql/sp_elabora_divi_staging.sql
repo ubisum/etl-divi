@@ -53,12 +53,27 @@ BEGIN
     DECLARE v_id_tipo INT DEFAULT NULL;
 	DECLARE v_sigla_provincia VARCHAR(2) DEFAULT NULL;
 	DECLARE v_nuovo_id INT DEFAULT NULL;
-
+	
+	DECLARE bene_id BIGINT DEFAULT NULL;
+	DECLARE bene_hash VARCHAR(64) DEFAULT NULL;
+	DECLARE bene_current INT DEFAULT 0;
+	
+	-- --------------------------------------------------------------
+    -- Variabili di riferimento
+    -- --------------------------------------------------------------
+	DECLARE bene_ref INT DEFAULT NULL;
+	DECLARE dc_ref INT DEFAULT NULL;
+	DECLARE loc_ref INT DEFAULT NULL;
+	DECLARE ente_ref INT DEFAULT NULL;
+	DECLARE prov_ref INT DEFAULT NULL;
+	
+	DECLARE v_oggi_dt DATETIME;
+	
     -- ----------------------------------------------------------------
     -- Dichiarazione cursore
     -- ----------------------------------------------------------------
 
-    DECLARE cur CURSOR FOR
+     DECLARE cur CURSOR FOR
         SELECT
             bene_source_id,
             bene_classe,
@@ -95,11 +110,27 @@ BEGIN
             batch_id
         FROM DIVI_STAGING;
 
+
     -- ----------------------------------------------------------------
     -- Handler fine cursore
     -- ----------------------------------------------------------------
     DECLARE CONTINUE HANDLER FOR NOT FOUND
         SET done = TRUE;
+		
+	-- --------------------------------------------------------------
+    -- Setting ariabili di utilita'
+    -- --------------------------------------------------------------
+	SET v_oggi_dt = NOW();
+	
+	INSERT
+				INTO
+				debug_sp_elabora_divi 
+				(data_log,
+				source_id,
+				hash_valore,
+				punto)
+			    VALUES
+				(CURRENT_TIMESTAMP, v_bene_source_id, v_bene_hash, 'init');
 
     -- ----------------------------------------------------------------
     -- Apertura cursore
@@ -143,11 +174,7 @@ BEGIN
             v_prov_tipo,
             v_prov_data,
             v_prov_hash,
-            v_batch_id;
-
-        IF done THEN
-            LEAVE read_loop;
-        END IF;
+            v_batch_id; 
 
         -- ----------------------------------------------------------------
         -- Recupero classe oppure creazione nuovo record
@@ -157,17 +184,28 @@ BEGIN
 		IF v_bene_classe IS NOT NULL THEN
 			BEGIN
 				DECLARE v_classe_trovata BOOLEAN DEFAULT TRUE;
-
+				
 				-- ---------------------------------------------------------------------------
 				-- Handler locale: pilota la creazione del nuovo record (se necessario)
 				-- ---------------------------------------------------------------------------
 				DECLARE CONTINUE HANDLER FOR NOT FOUND
 					SET v_classe_trovata = FALSE;
+					
+				INSERT
+				INTO
+				debug_sp_elabora_divi 
+				(data_log,
+				source_id,
+				hash_valore,
+				punto)
+			    VALUES
+				(CURRENT_TIMESTAMP, v_bene_source_id, v_bene_hash, 'bene n/a');
 
 				SELECT id
 				INTO v_id_classe
 				FROM lkp_tipologia_bene
-				WHERE LOWER(label) = LOWER(v_bene_classe)
+				WHERE 
+					LOWER(label) COLLATE utf8mb4_unicode_ci = LOWER(v_bene_classe) COLLATE utf8mb4_unicode_ci
 				LIMIT 1;
 
 				IF NOT v_classe_trovata THEN
@@ -205,7 +243,8 @@ BEGIN
 				SELECT id
 				INTO v_id_tipo
 				FROM lkp_categoria_bene
-				WHERE LOWER(label) = LOWER(v_bene_tipo)
+				WHERE 
+				LOWER(label) COLLATE utf8mb4_unicode_ci = LOWER(v_bene_tipo) COLLATE utf8mb4_unicode_ci
 				LIMIT 1;
 
 				IF NOT v_tipo_trovato THEN
@@ -224,28 +263,30 @@ BEGIN
 			END;
 		END IF;
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
+		-- ----------------------------------------------------------------
+        -- Ricerca della sigla della provincia
         -- ----------------------------------------------------------------
-        -- Qui continueranno le altre elaborazioni:
-        --
-        -- uso di v_id_classe
-        -- inserimenti nelle tabelle collegate
-        -- gestione hash
-        -- gestione batch
-        -- ----------------------------------------------------------------
-
-
+	 	IF v_loc_provincia IS NOT NULL THEN 
+			BEGIN
+				DECLARE v_provincia_trovata BOOLEAN DEFAULT TRUE; -- serve soltanto per mettere almeno un'istruzione nell'handler
+				
+				-- ---------------------------------------------------------------------------
+				-- Handler locale: pilota la creazione del nuovo record (se necessario)
+				-- ---------------------------------------------------------------------------
+				DECLARE CONTINUE HANDLER FOR NOT FOUND
+					SET v_provincia_trovata = FALSE;
+					
+				SELECT sigla
+				INTO v_sigla_provincia
+				FROM province
+				WHERE 
+				LOWER(nome) COLLATE utf8mb4_unicode_ci = LOWER(v_loc_provincia) COLLATE utf8mb4_unicode_ci;
+				
+				
+			END;
+		END IF; 
+		
+	
 
     END LOOP;
 

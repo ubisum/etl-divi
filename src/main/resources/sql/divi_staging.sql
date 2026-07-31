@@ -1,4 +1,5 @@
 CREATE TEMPORARY TABLE DIVI_STAGING
+/* CREATE TABLE DIVI_STAGING */
 (
 	bene_source_id int,
 	bene_classe varchar(200),

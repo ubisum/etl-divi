@@ -358,6 +358,7 @@ public class GenericdDAOImpl implements GenericDAO
 			logger.info("Rimozione della tabella temporanea (se presente)...");
 			Statement createStagingStmt = conn.createStatement();
 			createStagingStmt.execute("DROP TEMPORARY TABLE IF EXISTS DIVI_STAGING");
+//			createStagingStmt.execute("DROP TABLE IF EXISTS DIVI_STAGING");
 			
 			logger.info("Creazione tabella temporanea...");
 			createStagingStmt.executeUpdate(sqlTabellaTemporanea);
@@ -587,29 +588,29 @@ public class GenericdDAOImpl implements GenericDAO
 		
 		
 		/* classe */
-		if(property.getBeneClasse() != null)
-			bene_sb.append(property.getBeneClasse() + "|");
-		
-		else
-			bene_sb.append("NULL" + "|");
+//		if(property.getBeneClasse() != null)
+//			bene_sb.append(property.getBeneClasse() + "|");
+//		
+//		else
+//			bene_sb.append("NULL" + "|");
 		
 		ps.setString(counter++, property.getBeneClasse());
 		
 		/* tipo */
-		if(property.getBeneTipo() != null)
-			bene_sb.append(property.getBeneTipo() + "|");
-		
-		else
-			bene_sb.append("NULL" + "|");
+//		if(property.getBeneTipo() != null)
+//			bene_sb.append(property.getBeneTipo() + "|");
+//		
+//		else
+//			bene_sb.append("NULL" + "|");
 		
 		ps.setString(counter++, property.getBeneTipo());
 		
 		/* denominazione */
-		if(property.getBeneDenominazione() != null)
-			bene_sb.append(property.getBeneDenominazione() + "|");
-		
-		else
-			bene_sb.append("NULL" + "|");
+//		if(property.getBeneDenominazione() != null)
+//			bene_sb.append(property.getBeneDenominazione() + "|");
+//		
+//		else
+//			bene_sb.append("NULL" + "|");
 		
 		ps.setString(counter++, property.getBeneDenominazione());
 		
@@ -623,7 +624,7 @@ public class GenericdDAOImpl implements GenericDAO
 		
 		else
 		{
-			bene_sb.append("NULL" + "|");
+			bene_sb.append("NULL");
 			ps.setTimestamp(counter++, null);
 		}
 		

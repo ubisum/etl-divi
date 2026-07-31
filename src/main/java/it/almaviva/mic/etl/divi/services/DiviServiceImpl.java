@@ -45,6 +45,7 @@ public class DiviServiceImpl implements DiviService
 		
 		logger.info("Esecuzione stored procedure...");
 		genericDAO.eseguiStoredProcedure(DiviETLConsts.DIVI_STORED_PROCEDURE);
+//		genericDAO.eseguiStoredProcedure("sp_test_cursore_hash");
 	}
 
 }

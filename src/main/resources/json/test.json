@@ -1,0 +1,93 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+              {
+            "type": "Feature",
+            "id": "immobili_tutelati_04_1.fid--35376bc8_19ef51f3ad6_4358",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8.6468,
+                    44.6406
+                ]
+            },
+            "geometry_name": "geom",
+            "properties": {
+                "immo_regione": "Piemonte",
+                "immo_provincia": "Alessandria",
+                "immo_comune": "Ovada",
+                "immo_catasto": "NCT",
+                "immo_codice_catastale_comune": "G197",
+                "immo_sezione_censuaria": null,
+                "immo_sezione_urbana": null,
+                "immo_tipo_immobile": "T",
+                "immo_numero_foglio": "18",
+                "immo_codice_allegato": null,
+                "immo_codice_sviluppo": null,
+                "immo_particella": "A",
+                "immo_subalterno": null,
+                "immo_identificazione": "Comune di Ovada NCT  foglio 18, particella A",
+                "prov_immo_tipo_tutela": "tutela diretta",
+                "prov_immo_parte": false,
+                "indi_regione": "Piemonte",
+                "indi_provincia": "Alessandria",
+                "indi_comune": "Ovada",
+                "indi_odonimo": "Piazza dell'Assunta",
+                "indi_civico": null,
+                "indi_snc": false,
+                "indi_localita": null,
+                "indi_provvedimento": false,
+                "indi_principale": false,
+                "prov_indirizzi_originali_txt": null,
+                "prov_indirizzi_attuali_txt": null,
+                "prov_indirizzi_json": null,
+                "bene_altra_localizzazione": null,
+                "posizione_x": 8.646807161522485,
+                "posizione_y": 44.64055077568026,
+                "posizione_origine": "oggetto della tutela",
+                "bene_id": 74283,
+                "bene_classe": "Beni monumentali",
+                "bene_tipo": "chiesa",
+                "bene_denominazione": "Chiesa Parrocchiale di Nostra Signora Assunta",
+                "prov_id": 49768,
+                "prov_oggetto": "Chiesa Parrocchiale di Nostra Signora Assunta",
+                "prov_identificativi_catalografici": "",
+                "prov_tipo_tutela": "Tutela monumentale",
+                "prov_tipo_strumento_tutela": "Declaratoria",
+                "prov_legge": "L. 1089/1939",
+                "prov_rif_normativo": "Art. 4",
+                "prov_data": "1977-08-24Z",
+                "ente_id": 471,
+                "ente_nome_breve": "SABAP-AL",
+                "ente_nome_esteso": "Soprintendenza archeologia belle arti e paesaggio per le province di Alessandria Asti e Cuneo",
+                "ente_cf": "80090770019",
+                "ente_p_iva": null,
+                "id": 49768,
+                "data_ultimo_aggiornamento": "2026-05-19T09:59:47.902Z",
+                "beni_cert": 0
+            },
+            "bbox": [
+                8.6468,
+                44.6406,
+                8.6468,
+                44.6406
+            ]
+        }],
+	"totalFeatures": 17011,
+    "numberMatched": 17011,
+    "numberReturned": 1000,
+    "timeStamp": "2026-07-15T09:00:35.511Z",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:EPSG::6706"
+        }
+    },
+    "bbox": [
+        6.676,
+        38.7916,
+        16.4556,
+        45.9232
+    ]
+	
+}
